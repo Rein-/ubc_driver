@@ -5,12 +5,11 @@ var mainState = {
     preload: function() {
         game.stage.backgroundColor = '#b7b7b7';
 
-        game.load.image('car', 'assets/car1.png');
+        game.load.image('car', 'assets/car.png');
         game.load.image('stair', 'assets/stair.png');
     },
 
     create: function() {
-
         this.gamePaused = false;
 
         game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -35,12 +34,11 @@ var mainState = {
 
         this.score = -2;
         this.labelScore = this.game.add.text(20, 20, "0", { font: "30px Arial", fill: "#ffffff" });
-
     },
 
     goRight: function() {
-        if(this.carPosition != 7){
-            if(this.moveTimer == 5){
+        if(this.carPosition != 7) {
+            if(this.moveTimer == 5) {
                 this.car.body.x = this.car.body.x + 60;
                 this.moveTimer = 0;
                 this.carPosition = this.carPosition + 1;
@@ -51,8 +49,8 @@ var mainState = {
     },
 
     goLeft: function() {
-        if(this.carPosition != 0){
-            if(this.moveTimer == 5){
+        if(this.carPosition != 0) {
+            if(this.moveTimer == 5) {
                 this.car.body.x = this.car.body.x - 60;
                 this.moveTimer = 0;
                 this.carPosition = this.carPosition - 1;
@@ -67,25 +65,20 @@ var mainState = {
     },
 
     update: function() {
-
-        if(!this.gamePaused){
-
+        if(!this.gamePaused) {
             if(this.leftKey.isDown)
                 this.goLeft();
-            else if (this.rightKey.isDown)
+            else if(this.rightKey.isDown)
                 this.goRight();
             else
                 this.stopCar();
-
             game.physics.arcade.overlap(this.car, this.stairs, this.hitStair, null, this);
-
         } else {
-            if(this.spacebar.justPressed()){
+            if(this.spacebar.justPressed()) {
                 this.gamePaused = false;
                 game.state.start('main');
             }
         }
-
     },
 
     hitStair: function() {
@@ -100,18 +93,24 @@ var mainState = {
         this.game.time.events.remove(this.timer);
 
         // Go through all the stairs, and stop their movement
-        this.stairs.forEachAlive(function(p){
+        this.stairs.forEachAlive(function(p) {
             p.body.velocity.y = 0;
         }, this);
 
         this.restartGame();
-
     },
 
     restartGame: function() {
-        //game.debug.geom(this.overlay,'#0fffff');
-        this.endMessage = this.game.add.text(100, 245, "Score: " + this.score, { font: "24px Arial", fill: "#ffffff" });
-        this.endMessage = this.game.add.text(100, 275, "Press spacebar to restart", { font: "24px Arial", fill: "#ffffff" });
+        // Print the score for the user
+        this.endMessage = this.game.add.text(100, 245, "Score: " + this.score, {
+            font: "24px Arial", fill: "#ffffff"
+        });
+
+        //Print the option for the user to restart the game
+        this.endMessage = this.game.add.text(100, 275, "Press spacebar to restart", {
+            font: "24px Arial", fill: "#ffffff"
+        });
+
         this.gamePaused = true;
     },
 
@@ -136,8 +135,9 @@ var mainState = {
         if(this.score >= 0){
             this.labelScore.text = this.score;
         }
-    },
+    }
 };
 
+//Start the game
 game.state.add('main', mainState);
 game.state.start('main');
